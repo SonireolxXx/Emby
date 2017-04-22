@@ -47,7 +47,6 @@ namespace Emby.Server.Implementations.Security
         {
             get
             {
-#               LazyInitializer.EnsureInitialized(ref _isMbSupporter, ref _isMbSupporterInitialized, ref _isMbSupporterSyncLock, () => GetSupporterRegistrationStatus().Result.IsRegistered);
                 LazyInitializer.EnsureInitialized(ref _isMbSupporter, ref _isMbSupporterInitialized, ref _isMbSupporterSyncLock, () => GetRegistrationStatus().Result.IsRegistered);
                 return _isMbSupporter.Value;
             }
@@ -62,7 +61,6 @@ namespace Emby.Server.Implementations.Security
         private readonly IHttpClient _httpClient;
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IServerApplicationHost _appHost;
-#       private readonly ILogger _logger;
         private readonly IApplicationPaths _appPaths;
         private readonly IFileSystem _fileSystem;
         private readonly ICryptoProvider _cryptographyProvider;
@@ -118,7 +116,6 @@ namespace Emby.Server.Implementations.Security
         /// <returns>Task{MBRegistrationRecord}.</returns>
         public Task<MBRegistrationRecord> GetRegistrationStatus(string feature, string mb2Equivalent = null)
         {
-#           return GetRegistrationStatusInternal(feature, mb2Equivalent);
             return GetRegistrationStatus();
         }
 
@@ -131,14 +128,9 @@ namespace Emby.Server.Implementations.Security
         /// <returns>Task{MBRegistrationRecord}.</returns>
         public Task<MBRegistrationRecord> GetRegistrationStatus(string feature, string mb2Equivalent, string version)
         {
-#           return GetRegistrationStatusInternal(feature, mb2Equivalent, version);
             return GetRegistrationStatus();
         }
 
-#       private Task<MBRegistrationRecord> GetSupporterRegistrationStatus()
-#       {
-#           return GetRegistrationStatusInternal("MBSupporter", null, _appHost.ApplicationVersion.ToString());
-#       }
         private async Task<MBRegistrationRecord> GetRegistrationStatus()
         {
             return new MBRegistrationRecord
